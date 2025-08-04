@@ -4,6 +4,7 @@ import requests
 import trafilatura
 from bs4 import BeautifulSoup
 from colorama import init, Fore, Style
+from config.config import MODEL_NAME, USE_KEYWORD_EXTRACTION
 
 init(autoreset=True)
 # 🗂️ Historique des échanges
@@ -13,7 +14,7 @@ def search_or_not():
     sys_msg = sys_msgs.search_or_not_msg
 
     response = ollama.chat(
-        model='phi4-mini:latest',
+        model=MODEL_NAME,
         messages=[sys_msg, assistant_convo[-1]]
     )
 
@@ -25,7 +26,7 @@ def query_generator():
     query_msg = f'Créer une requete de recherche à partir de ce prompt: \n{assistant_convo[-1]["content"]}'
 
     response = ollama.chat(
-        model='phi4-mini:latest',
+        model=MODEL_NAME,
         messages=[sys_msg, {'role': 'user', 'content': query_msg}]
     )
     return response['message']['content']
@@ -113,7 +114,7 @@ def best_search_result(s_results, query):
     for _ in range(2):
         try:
             response = ollama.chat(
-                model='phi4-mini:latest',
+                model=MODEL_NAME,
                 messages=[
                     {'role': 'system', 'content': sys_msg},
                     {'role': 'user', 'content': best_msg}
@@ -130,7 +131,7 @@ def extract_keywords_from_prompt(user_prompt):
     print(f'{Fore.LIGHTRED_EX} EXTRACT SEMANTIQUE KEY WORD ... {Style.RESET_ALL}')
     sys_msg = "Extract relevant keywords for a web search from this user prompt. Return as a Python list only, no explanation."
     response = ollama.chat(
-        model='phi4-mini:latest',
+        model=MODEL_NAME,
         messages=[
             {'role': 'system', 'content': sys_msg},
             {'role': 'user', 'content': user_prompt}
@@ -197,7 +198,7 @@ def contains_data_needed(search_content, query):
     )
 
     response = ollama.chat(
-        model='phi4-mini:latest',
+        model=MODEL_NAME,
         messages=[
             {'role': 'system', 'content': sys_msg},
             {'role': 'user', 'content': needed_prompt}
@@ -216,7 +217,7 @@ def contains_data_needed(search_content, query):
 
 def stream_assistant_response():
     global assistant_convo
-    response_stream = ollama.chat( model='phi4-mini:latest',
+    response_stream = ollama.chat( model=MODEL_NAME,
         messages=assistant_convo,
         stream=True
     )
@@ -237,8 +238,12 @@ def main():
 
     while True:
         prompt = input(f'{Fore.LIGHTGREEN_EX}USER: \n')
-        new_prompt = extract_keywords_from_prompt(prompt)
-        assistant_convo.append({'role': 'user', 'content': new_prompt})
+        if USE_KEYWORD_EXTRACTION:
+            new_prompt = extract_keywords_from_prompt(prompt)
+        else:
+            new_prompt = prompt  # Utilisation directe du prompt
+
+        assistant_convo.append({'role': 'user', 'content': prompt})
 
         if search_or_not():
             context = ai_search()
@@ -256,6 +261,7 @@ def main():
                     "attends d’avoir l’accord explicite de l’utilisateur."
                 )
 
+        print(f'{Fore.LIGHTMAGENTA_EX} FINAL PROMPT: {prompt} {Style.RESET_ALL}')
         assistant_convo.append({'role': 'user', 'content': prompt})
         stream_assistant_response()
 

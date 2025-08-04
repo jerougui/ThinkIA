@@ -32,9 +32,29 @@ source .venv/bin/activate    # ou .venv\Scripts\activate sous Windows
 pip install -r requirements.txt
 ```
 # Exemple 
+## Pré-requis : ollama
+Assure-toi que Ollama est bien installé et que le modèle phi4-mini est lancé :
 ```bash
-utilisateur : cherche deux informations interessante (innovation et ou insolite) qui s'est produite aujourd'hui 04/08/2025
+ollama serve # s'il n'est pas encore lancer
+
+ollama run phi4-mini:latest
+
+# vérifi que le modèle est bien lancé
+ollama ps
+
 ```
 
-## Exemple de sortie console
+## ▶️ lancement du programme 
+Exécute le script principal :
+
+```bash
+python search_agent.py
+```
+
+Exemple d’entrée utilisateur :
+```bash
+ cherche deux informations interessante (innovation et ou insolite) qui s'est produite aujourd'hui 04/08/2025
+```
+
+## 🖥️ Exemple de sortie console
 ![Exemple de sortie console](resources/img/console_example01.png)
