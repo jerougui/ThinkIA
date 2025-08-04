@@ -30,3 +30,10 @@ source .venv/bin/activate    # ou .venv\Scripts\activate sous Windows
 
 # Installer les dépendances
 pip install -r requirements.txt
+
+# Exemple de recherche : 
+```batch 
+utilisateur : cherche deux informations interessante (innovation et ou insolite) qui s'est produite aujourd'hui 04/08/2025
+```
+
+![Exemple de sortie console](resources/img/console_example01.png
