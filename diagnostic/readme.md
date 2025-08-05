@@ -35,11 +35,6 @@ Installez les dépendances :
 ```bash
 pip install -r requirements.txt
 ```
-Lancez l'agent :
-
-```bash
-python diagnostic/diagnostic_ia_agents.py
-```
 
 📂 Structure du projet
 ```
@@ -47,13 +42,14 @@ ton_projet/
 │
 ├── diagnostic/
 │   └── diagnostic_ia_agents.py
+│   └── readme.md
 │
 ├── tools/
 │   └── sablier.py
 
 diagnosic/diagnostic_ia_agents.py      → Script principal
-tools/sablier.py                   → Animation sablier personnalisée
-diagnosic/README.md                → Documentation du projet
+tools/sablier.py                       → Animation sablier personnalisée
+diagnosic/README.md                    → Documentation du projet
 ```
 ▶️ Exécution
 ```bash
@@ -96,14 +92,6 @@ Voici une représentation simplifiée des interactions principales dans ton proj
 ```
 
 ## Exemple :
-
-C:\ENVDEV\depot\AgentAI\ThinkIA>MODEL_NAME = "phi4-mini"
-'MODEL_NAME' n’est pas reconnu en tant que commande interne
-ou externe, un programme exécutable ou un fichier de commandes.
-
-C:\ENVDEV\depot\AgentAI\ThinkIA>MODEL_NAME = "phi4-mini"
-'MODEL_NAME' n’est pas reconnu en tant que commande interne
-ou externe, un programme exécutable ou un fichier de commandes.
 
 >>\ThinkIA>python diagnostic/diagnostic_ia_agents.py
 🔍 Saisis le sujet médical à explorer (ex : diabète, asthme...) : fatigue
