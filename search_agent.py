@@ -4,6 +4,7 @@ import requests
 import trafilatura
 from bs4 import BeautifulSoup
 from colorama import init, Fore, Style
+from duckduckgo_search import DDGS
 from config.config import MODEL_NAME, USE_KEYWORD_EXTRACTION
 
 init(autoreset=True)
@@ -23,7 +24,7 @@ def search_or_not():
 
 def query_generator():
     sys_msg = sys_msgs.query_msg
-    query_msg = f'Créer une requete concise de recherche utilisant duckduckgo ou google à partir de ce prompt: \n{assistant_convo[-1]["content"]}'
+    query_msg = f'Créer une requete composée de mots clés au minimum afin de mener la recherche web de ce prompt: \n{assistant_convo[-1]["content"]}'
 
     response = ollama.chat(
         model=MODEL_NAME,
@@ -31,42 +32,21 @@ def query_generator():
     )
     return response['message']['content']
 
-# ⬇️ Search using DuckDuckGo
-def duckduckgo_search(query):
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/58.0.3029.110 Safari/537.36"
-        )
-    }
-    url = f'https://html.duckduckgo.com/html/?q={query}'
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-
-    soup = BeautifulSoup(response.text, 'html.parser')
+def duckduckgo_search(query, max_results=3):
     results = []
 
-    for i, result in enumerate(soup.find_all('div', class_='result'), start=1):
-        if i > 3:
-            break
+    with DDGS() as ddgs:
+        for i, r in enumerate(ddgs.text(query), start=1):
+            if i > max_results:
+                break
 
-        title_tag = result.find('a', class_='result__a')
-        if not title_tag:
-            continue
+            print(f"[Résultat {i}] {r['title']}")
+            results.append({
+                'id': i,
+                'link': r['href'],
+                'search_description': r['body']
+            })
 
-        link = title_tag['href']
-        snippet_tag = result.find('a', class_='result__snippet')
-        snippet = snippet_tag.text.strip() if snippet_tag else 'No description available'
-
-        results.append({
-            'id': i,
-            'link': link,
-            'search_description': snippet
-        })
-
-        print(f'{Fore.LIGHTYELLOW_EX} Résultat {i} : {snippet} {Style.RESET_ALL}')
-    
     return results
 
 # ⬇️ Search using Google.fr
@@ -150,7 +130,7 @@ def extract_keywords_from_prompt(user_prompt):
 
 def ai_search():
     context = None
-    print(f'{Fore.LIGHTRED_EX}GENERATING SEARCH QUERY.{Style.RESET_ALL}')
+    print(f'{Fore.LIGHTRED_EX}   GENERATING SEARCH QUERY....{Style.RESET_ALL}')
     search_query = query_generator()
     print(f'{Fore.LIGHTBLUE_EX}SEARCHING WEB FOR : {search_query} {Style.RESET_ALL}')
 
@@ -246,6 +226,7 @@ def main():
         assistant_convo.append({'role': 'user', 'content': prompt})
 
         if search_or_not():
+            print(f'{Fore.LIGHTMAGENTA_EX} [ALERT] User input prompt requires additional web search ... {Style.RESET_ALL}')
             context = ai_search()
             assistant_convo = [assistant_convo[-1]]  # conserve uniquement le dernier prompt
 

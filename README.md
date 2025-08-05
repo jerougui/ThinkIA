@@ -63,4 +63,5 @@ Exemple d’entrée utilisateur :
 ## 🖥️ Exemple de sortie console
 ![Exemple de sortie console](resources/img/console_example01.png)
 
-# Reférence : https://www.youtube.com/watch?v=9KKnNh89AGU
+# Reférence : 
+https://www.youtube.com/watch?v=9KKnNh89AGU
