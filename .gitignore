@@ -1,0 +1,8 @@
+# .gitignore
+
+# Ignorer tous les fichiers Python compilés
+*.pyc
+
+# Ignorer les dossiers __pycache__ générés automatiquement
+__pycache__/
+config/__pycache__/
