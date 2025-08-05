@@ -19,24 +19,45 @@ Ce projet est un agent conversationnel médical qui utilise un modèle de langag
 pip install ollama
 ollama pull phi4-mini
 ```
+une fois ollama installer, lancer le modèle comme suit :
+```bash
+ollama run phi4-mini
+```
+## 🖥️ Pour les utilisateurs
+Clonez le projet :
+
+```bash
+git clone https://github.com/ton_user/ThinkIA.git
+cd ThinkIA
+```
+Installez les dépendances :
+
+```bash
+pip install -r requirements.txt
+```
+Lancez l'agent :
+
+```bash
+python diagnostic/diagnostic_ia_agents.py
+```
 
 📂 Structure du projet
 ```
 ton_projet/
 │
 ├── diagnostic/
-│   └── diagnostic_agent.py
+│   └── diagnostic_ia_agents.py
 │
 ├── tools/
 │   └── sablier.py
 
-diagnosic/diagnostic_agent.py      → Script principal
+diagnosic/diagnostic_ia_agents.py      → Script principal
 tools/sablier.py                   → Animation sablier personnalisée
 diagnosic/README.md                → Documentation du projet
 ```
 ▶️ Exécution
 ```bash
-python diagnostic_agent.py
+python diagnostic/diagnostic_ia_agents.py
 ```
 🛠️ Personnalisation
 Tu peux modifier MAX_QUESTIONS pour ajuster le nombre de questions posées
@@ -84,7 +105,7 @@ C:\ENVDEV\depot\AgentAI\ThinkIA>MODEL_NAME = "phi4-mini"
 'MODEL_NAME' n’est pas reconnu en tant que commande interne
 ou externe, un programme exécutable ou un fichier de commandes.
 
->>\ThinkIA>python diagnostic/diagnostic_agent.py
+>>\ThinkIA>python diagnostic/diagnostic_ia_agents.py
 🔍 Saisis le sujet médical à explorer (ex : diabète, asthme...) : fatigue
 🩺 Veuillez répondre aux questions suivantes :
 
@@ -135,3 +156,6 @@ sans excès pour permettre un bon processus de récupération.
 4. Surveillance : Il est recommandé que le patient surveille ses niveaux de fatigue tout au long de la semaine pour identifier les schémas ou déclencheurs spécifiques pouvant nécessiter des ajustements dans son style de vie.
 
 Il pourrait être utile de suivre Bob pendant une période plus longue, en notant précisément sa nutrition et d'autres activités quotidiennes (taux d'activité physique, temps passé à travailler mentalement, etc.) pour mieux comprendre les facteurs contribuant au symptôme. Si le problème persiste ou s'aggrave, des évaluations médicales supplémentaires pourraient être nécessaires.
+
+# Conclusion : 
+NB -> choix du modèle est très important pour avoir une meilleure pertinence d'un diagnostic type médical
