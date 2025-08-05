@@ -1,8 +1,10 @@
 # 🧠 Search Agent – Assistant IA avec Recherche Web Intelligente
 
-**Search Agent** est un assistant intelligent en Python capable d'améliorer ses réponses grâce à des recherches web en temps réel. Il utilise le modèle `phi4-mini` via Ollama, extrait des mots-clés sémantiques, interroge DuckDuckGo ou Google, sélectionne les résultats les plus pertinents et génère des réponses contextualisées.
+**Search Agent** est un assistant intelligent en Python capable d'améliorer ses réponses grâce à des recherches web en temps réel. Il utilise le modèle `ollama` via Ollama, extrait des mots-clés sémantiques, interroge DuckDuckGo ou Google, sélectionne les résultats les plus pertinents et génère des réponses contextualisées.
 
 ---
+
+![Schéma et processus ](resources/img/schema_diagram.png)
 
 ## 🚀 Fonctionnalités
 
@@ -30,6 +32,8 @@ source .venv/bin/activate    # ou .venv\Scripts\activate sous Windows
 
 # Installer les dépendances
 pip install -r requirements.txt
+
+python -m pip install -r requirements.txt
 ```
 # Exemple 
 ## Pré-requis : ollama
@@ -58,3 +62,5 @@ Exemple d’entrée utilisateur :
 
 ## 🖥️ Exemple de sortie console
 ![Exemple de sortie console](resources/img/console_example01.png)
+
+# Reférence : https://www.youtube.com/watch?v=9KKnNh89AGU

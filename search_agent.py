@@ -23,7 +23,7 @@ def search_or_not():
 
 def query_generator():
     sys_msg = sys_msgs.query_msg
-    query_msg = f'Créer une requete de recherche à partir de ce prompt: \n{assistant_convo[-1]["content"]}'
+    query_msg = f'Créer une requete concise de recherche utilisant duckduckgo ou google à partir de ce prompt: \n{assistant_convo[-1]["content"]}'
 
     response = ollama.chat(
         model=MODEL_NAME,
@@ -152,7 +152,7 @@ def ai_search():
     context = None
     print(f'{Fore.LIGHTRED_EX}GENERATING SEARCH QUERY.{Style.RESET_ALL}')
     search_query = query_generator()
-    print(f'{Fore.LIGHTRED_EX}SEARCHING WEB FOR : {search_query} {Style.RESET_ALL}')
+    print(f'{Fore.LIGHTBLUE_EX}SEARCHING WEB FOR : {search_query} {Style.RESET_ALL}')
 
     if search_query[0] == '"':
         search_query = search_query[1:-1]
