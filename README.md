@@ -12,7 +12,7 @@
 - 🔍 Recherche web via DuckDuckGo ou Google
 - 🧭 Sélection intelligente du meilleur résultat
 - 📄 Scraping de pages web + filtrage contextuel
-- 🤖 Réponses enrichies avec le modèle Ollama (`phi4-mini`)
+- 🤖 Réponses enrichies en utilisant différents modèles llm en local ou distant
 - 🎨 Affichage coloré dans le terminal grâce à Colorama
 
 ---
@@ -37,7 +37,8 @@ GEMINI_API_KEY=<GEMINI_API_KEY>
 OPENROUTER_API_KEY=<OPENROUTER_API_KEY>
 ````
 
-# Installer les dépendances
+## Installer les dépendances
+```bash
 pip install -r requirements.txt
 
 python -m pip install -r requirements.txt
@@ -45,6 +46,7 @@ python -m pip install -r requirements.txt
 # Exemple 
 ## Pré-requis : ollama
 Assure-toi que Ollama est bien installé et que le modèle phi4-mini est lancé :
+
 ```bash
 ollama serve # s'il n'est pas encore lancer
 
@@ -52,8 +54,8 @@ ollama run phi4-mini:latest
 
 # vérifi que le modèle est bien lancé
 ollama ps
-
 ```
+remarque le script tentera de lancer ollama en local si ce dernier n'est pas lancé.
 
 ## ▶️ lancement du programme 
 Exécute le script principal :
