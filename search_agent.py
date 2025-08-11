@@ -1,10 +1,13 @@
-import ollama
 import sys_msgs
 import requests
 import trafilatura
 from bs4 import BeautifulSoup
 from colorama import init, Fore, Style
-from config.config import MODEL_NAME, USE_KEYWORD_EXTRACTION
+from ddgs import DDGS
+from tools.llm_provider import chat
+from config.config import USE_KEYWORD_EXTRACTION, PROVIDER
+from tools.ollama_manager import launch_model_if_needed
+
 
 init(autoreset=True)
 # 🗂️ Historique des échanges
@@ -13,8 +16,7 @@ assistant_convo = [sys_msgs.assistant_msg]
 def search_or_not():
     sys_msg = sys_msgs.search_or_not_msg
 
-    response = ollama.chat(
-        model=MODEL_NAME,
+    response = chat(
         messages=[sys_msg, assistant_convo[-1]]
     )
 
@@ -23,50 +25,43 @@ def search_or_not():
 
 def query_generator():
     sys_msg = sys_msgs.query_msg
-    query_msg = f'Créer une requete concise de recherche utilisant duckduckgo ou google à partir de ce prompt: \n{assistant_convo[-1]["content"]}'
+    query_msg = f'Créer une requete composée de mots clés au minimum afin de mener la recherche web de ce prompt: \n{assistant_convo[-1]["content"]}'
 
-    response = ollama.chat(
-        model=MODEL_NAME,
+    response = chat(
         messages=[sys_msg, {'role': 'user', 'content': query_msg}]
     )
     return response['message']['content']
 
-# ⬇️ Search using DuckDuckGo
-def duckduckgo_search(query):
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/58.0.3029.110 Safari/537.36"
-        )
-    }
-    url = f'https://html.duckduckgo.com/html/?q={query}'
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-
-    soup = BeautifulSoup(response.text, 'html.parser')
+def duckduckgo_search(query, max_results=3):
     results = []
 
-    for i, result in enumerate(soup.find_all('div', class_='result'), start=1):
-        if i > 3:
-            break
+    excluded_extensions = ['.pdf', '.json', '.zip', '.diff', '.tar.gz', '.exe']
+    excluded_keywords = ['tokenizer', 'ckpt', 'commit', 'download', 'blob', 'raw', 'api']
 
-        title_tag = result.find('a', class_='result__a')
-        if not title_tag:
-            continue
+    with DDGS() as ddgs:
+        for i, r in enumerate(ddgs.text(query), start=1):
+            if i > max_results:
+                break
 
-        link = title_tag['href']
-        snippet_tag = result.find('a', class_='result__snippet')
-        snippet = snippet_tag.text.strip() if snippet_tag else 'No description available'
+            link = r['href'].lower()
 
-        results.append({
-            'id': i,
-            'link': link,
-            'search_description': snippet
-        })
+            # 🔍 Filtrage par extension
+            if any(link.endswith(ext) for ext in excluded_extensions):
+                print(f"{Fore.YELLOW}⏩ Ignoré (extension non textuelle) : {link}{Style.RESET_ALL}")
+                continue
 
-        print(f'{Fore.LIGHTYELLOW_EX} Résultat {i} : {snippet} {Style.RESET_ALL}')
-    
+            # 🔍 Filtrage par mot-clé technique
+            if any(keyword in link for keyword in excluded_keywords):
+                print(f"{Fore.YELLOW}⏩ Ignoré (lien technique) : {link}{Style.RESET_ALL}")
+                continue
+
+            print(f"[Résultat {i}] {r['title']}")
+            results.append({
+                'id': i,
+                'link': r['href'],
+                'search_description': r['body']
+            })
+
     return results
 
 # ⬇️ Search using Google.fr
@@ -110,11 +105,10 @@ def best_search_result(s_results, query):
         f"SEARCH_QUERY: {query}"
     )
 
-    # Tentatives de sélection du meilleur résultat via Ollama
+    # Tentatives de sélection du meilleur résultat
     for _ in range(2):
         try:
-            response = ollama.chat(
-                model=MODEL_NAME,
+            response = chat(
                 messages=[
                     {'role': 'system', 'content': sys_msg},
                     {'role': 'user', 'content': best_msg}
@@ -130,8 +124,7 @@ import ast
 def extract_keywords_from_prompt(user_prompt):
     print(f'{Fore.LIGHTRED_EX} EXTRACT SEMANTIQUE KEY WORD ... {Style.RESET_ALL}')
     sys_msg = "Extract relevant keywords for a web search from this user prompt. Return as a Python list only, no explanation."
-    response = ollama.chat(
-        model=MODEL_NAME,
+    response = chat(
         messages=[
             {'role': 'system', 'content': sys_msg},
             {'role': 'user', 'content': user_prompt}
@@ -150,15 +143,17 @@ def extract_keywords_from_prompt(user_prompt):
 
 def ai_search():
     context = None
-    print(f'{Fore.LIGHTRED_EX}GENERATING SEARCH QUERY.{Style.RESET_ALL}')
+    print(f'{Fore.LIGHTRED_EX}   GENERATING SEARCH QUERY....{Style.RESET_ALL}')
     search_query = query_generator()
     print(f'{Fore.LIGHTBLUE_EX}SEARCHING WEB FOR : {search_query} {Style.RESET_ALL}')
 
-    if search_query[0] == '"':
+    if search_query.startswith('"') and search_query.endswith('"'):
         search_query = search_query[1:-1]
-    
+
     search_results = duckduckgo_search(search_query)
     context_found = False
+    max_attempts = 5
+    attempts = 0
 
     if search_results:
         print(f'\n{Fore.LIGHTGREEN_EX}📌 Résultats de recherche pour "{search_query}" :{Style.RESET_ALL}\n')
@@ -167,26 +162,32 @@ def ai_search():
             print(f"{Fore.LIGHTMAGENTA_EX}🔗 Lien : {result['link']}\n{Style.RESET_ALL}")
     else:
         print(f"{Fore.RED}⚠️ Aucun résultat trouvé pour : {search_query}{Style.RESET_ALL}")
+        return None
 
-    
-    while not context_found and len(search_results) > 0:
+    while not context_found and search_results and attempts < max_attempts:
         print(f'{Fore.LIGHTCYAN_EX} SEARCH FOR BEST ANSWER.... {Style.RESET_ALL}')
         best_result = best_search_result(s_results=search_results, query=search_query)
+        attempts += 1
+
         try:
             page_link = search_results[best_result]['link']
             print(f'{Fore.LIGHTCYAN_EX} BEST LINK FOUND {page_link}. {Style.RESET_ALL}')
-        except:
+        except Exception as e:
             print(f'{Fore.RED} FAILED TO SELECT BEST SEARCH RESULT, TRYING AGAIN. {Style.RESET_ALL}')
             continue
 
         page_text = scrape_webpage(page_link)
         search_results.pop(best_result)
-        context_found = True
 
         if page_text and contains_data_needed(search_content=page_text, query=search_query):
             context = page_text
             context_found = True
+
+    if not context_found:
+        print(f"{Fore.YELLOW}⚠️ Aucune donnée pertinente trouvée après {max_attempts} tentatives.{Style.RESET_ALL}")
+
     return context
+
 
 def contains_data_needed(search_content, query):
     sys_msg = sys_msgs.contains_data_msg
@@ -197,14 +198,16 @@ def contains_data_needed(search_content, query):
         f"SEARCH_QUERY: {query}"
     )
 
-    response = ollama.chat(
-        model=MODEL_NAME,
+    #print("Prompt envoyé au modèle :\n", needed_prompt)
+
+    response = chat(
         messages=[
             {'role': 'system', 'content': sys_msg},
             {'role': 'user', 'content': needed_prompt}
         ]
     )
 
+    #print("Réponse du modèle :", response)
     content = response['message']['content']
 
     if 'true' in content.lower():
@@ -214,27 +217,42 @@ def contains_data_needed(search_content, query):
         print(f'{Fore.LIGHTRED_EX} DATA NOT RELEVENT (stop searching) {Style.RESET_ALL}')
         return False
 
-
 def stream_assistant_response():
     global assistant_convo
-    response_stream = ollama.chat( model=MODEL_NAME,
-        messages=assistant_convo,
-        stream=True
-    )
-
-    complete_response = ''
     print('ASSISTANT:')
 
-    for chunk in response_stream:
-        print(f'{Fore.WHITE}{chunk["message"]["content"]}{Style.RESET_ALL}', end='', flush=True)
-        complete_response += chunk['message']['content']
+    complete_response = ''
 
-    # 📝 Mémorisation de la réponse
-    assistant_convo.append({'role': 'assistant','content': complete_response})
+    if PROVIDER == 'ollama':
+        response_stream = chat(messages=assistant_convo, stream=True)
+        for chunk in response_stream:
+            content = chunk["message"]["content"]
+            print(f'{Fore.WHITE}{content}{Style.RESET_ALL}', end='', flush=True)
+            complete_response += content
+
+    elif PROVIDER == 'openrouter':
+        response_stream = chat(messages=assistant_convo, stream=True)
+        for chunk in response_stream:
+            delta = chunk.choices[0].delta
+            if delta and delta.content:
+                print(f'{Fore.WHITE}{delta.content}{Style.RESET_ALL}', end='', flush=True)
+                complete_response += delta.content
+
+    elif PROVIDER == 'gemini':
+        # Gemini ne supporte pas le streaming → appel classique
+        response = chat(messages=assistant_convo, stream=False)
+        content = response["message"]["content"]
+        print(f'{Fore.WHITE}{content}{Style.RESET_ALL}', end='', flush=True)
+        complete_response = content
+
+    assistant_convo.append({'role': 'assistant', 'content': complete_response})
     print('\n')
 
 def main():
     global assistant_convo
+
+    # ⚙️ Vérifie et lance le modèle Ollama si nécessaire
+    launch_model_if_needed()
 
     while True:
         prompt = input(f'{Fore.LIGHTGREEN_EX}USER: \n')
@@ -246,6 +264,7 @@ def main():
         assistant_convo.append({'role': 'user', 'content': prompt})
 
         if search_or_not():
+            print(f'{Fore.LIGHTMAGENTA_EX} [ALERT] User input prompt requires additional web search ... {Style.RESET_ALL}')
             context = ai_search()
             assistant_convo = [assistant_convo[-1]]  # conserve uniquement le dernier prompt
 

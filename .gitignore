@@ -6,3 +6,5 @@
 # Ignorer les dossiers __pycache__ générés automatiquement
 __pycache__/
 config/__pycache__/
+
+.env

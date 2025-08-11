@@ -1,6 +1,6 @@
 # 🧠 Search Agent – Assistant IA avec Recherche Web Intelligente
 
-**Search Agent** est un assistant intelligent en Python capable d'améliorer ses réponses grâce à des recherches web en temps réel. Il utilise le modèle `ollama` via Ollama, extrait des mots-clés sémantiques, interroge DuckDuckGo ou Google, sélectionne les résultats les plus pertinents et génère des réponses contextualisées.
+**Search Agent** est un assistant intelligent en Python capable d’améliorer ses réponses grâce à des recherches web en temps réel. Il utilise des modèles IA comme ollama en local via Ollama, ou des providers distants tels que OpenRouter ou Gemini. L’agent extrait des mots-clés sémantiques, interroge DuckDuckGo ou Google, sélectionne les résultats les plus pertinents et génère des réponses contextualisées.
 
 ---
 
@@ -23,12 +23,19 @@ Prérequis : [Python 3.10+](https://www.python.org/downloads/)
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-utilisateur/search-agent.git
-cd search-agent
+git clone https://github.com/jerougui/ThinkIA.git
+cd ThinkIA
 
-# (Optionnel) Créer un environnement virtuel
-python -m venv .venv
-source .venv/bin/activate    # ou .venv\Scripts\activate sous Windows
+```
+🔐 Configuration des clés API
+Pour que l’agent fonctionne correctement, tu dois créer un fichier .env à la racine du projet. Ce fichier contient les clés API privées nécessaires à la communication avec les modèles d’IA.
+
+📄 Exemple de fichier `.env :
+```text
+# 🔐 Clés API
+GEMINI_API_KEY=<GEMINI_API_KEY>
+OPENROUTER_API_KEY=<OPENROUTER_API_KEY>
+````
 
 # Installer les dépendances
 pip install -r requirements.txt
@@ -63,4 +70,5 @@ Exemple d’entrée utilisateur :
 ## 🖥️ Exemple de sortie console
 ![Exemple de sortie console](resources/img/console_example01.png)
 
-# Reférence : https://www.youtube.com/watch?v=9KKnNh89AGU
+# Reférence : 
+https://www.youtube.com/watch?v=9KKnNh89AGU
