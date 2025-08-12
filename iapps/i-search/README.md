@@ -19,7 +19,8 @@
 
 ## 📦 Installation
 
-Prérequis : [Python 3.10+](https://www.python.org/downloads/)
+### Prérequis : 
+[Python 3.10+](https://www.python.org/downloads/)
 
 ```bash
 # Cloner le dépôt
@@ -61,7 +62,7 @@ remarque le script tentera de lancer ollama en local si ce dernier n'est pas lan
 Exécute le script depuis la racine du projet :
 
 ```bash
-ThinkIA> python iapps/i-search/search_agent.py
+ThinkIA>python iapps/i-search/search_agent.py
 ```
 
 Exemple d’entrée utilisateur :

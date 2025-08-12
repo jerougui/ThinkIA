@@ -3,10 +3,70 @@
 Ce projet présente des exemples concrets d'utilisation des techniques d'agents IA organisés en mode **Crew**, c’est-à-dire des agents collaborant pour accomplir des tâches complexes de manière autonome et coordonnée.
 
 ## 📁 Structure du projet
+```
+THINKIA/
+├── config/
+├── iapps/
+│   └── diagnostic/
+│       ├── diagnostic_ia_agents.py
+│       └── readme.md
+├── i-search/
+│   ├── README.md
+│   └── search_agent.py
+├── prompts/
+│   └── sys_msgs.py
+├── resources/
+│   └── img/
+│       ├── console_example01.png
+│       └── schema_diagram.png
+├── tests/
+│   └── ollama_check.py
+├── tools/
+│   ├── gemini_provider.py
+│   ├── llm_provider.py
+│   ├── ollama_manager.py
+│   ├── ollama_provider.py
+│   ├── openrouter_provider.py
+│   └── sablier.py
+├── .env
+└── .gitignore
 
-THINKIA/ ├── iapps/ │ ├── diagnostic/ │ │ ├── diagnostic_ia_agents.py │ │ └── readme.md │ ├── i-search/ │ │ ├── search_agent.py │ │ └── readme.md ├── README.md ← (ce fichier)
+```
+# Avant de commencer
 
+## Prérequis :
+ [Python 3.10+](https://www.python.org/downloads/)
+ ## 📖 Documentation Ollama
 
+Pour démarrer rapidement avec Ollama et exécuter des modèles localement, consulte la section [Quickstart de la documentation officielle](https://github.com/ollama/ollama/blob/main/README.md#quickstart) sur GitHub.
+
+## 🚀 Documentation OpenRouter
+
+Pour intégrer rapidement OpenRouter et accéder à des centaines de modèles via une API unifiée, consulte le [guide Quickstart officiel](https://openrouter.ai/docs/quickstart).
+
+ ## QuickStart
+```bash
+# Cloner le dépôt
+git clone https://github.com/jerougui/ThinkIA.git
+cd ThinkIA
+
+```
+🔐 Configuration des clés API
+Pour que l’agent fonctionne correctement, tu dois créer un fichier .env à la racine du projet. Ce fichier contient les clés API privées nécessaires à la communication avec les modèles d’IA.
+
+📄 Exemple de fichier `.env :
+```text
+# 🔐 Clés API
+GEMINI_API_KEY=<GEMINI_API_KEY>
+OPENROUTER_API_KEY=<OPENROUTER_API_KEY>
+````
+
+## Installer les dépendances
+```bash
+pip install -r requirements.txt
+
+python -m pip install -r requirements.txt
+```
 ---
 
 ## 🚀 Lancer les exemples
@@ -15,13 +75,13 @@ THINKIA/ ├── iapps/ │ ├── diagnostic/ │ │ ├── diagnostic
 ```bash
 python iapps/diagnostic/diagnostic_ia_agents.py
 ```
-➡️ Voir iapps/diagnostic/readme.md pour plus d'informations.
+➡️ Voir [iapps/diagnostic/readme.md](iapps/diagnostic/readme.md) pour plus d'informations.
 
 ## 🔍 Recherche intelligente par agents IA
 ```bash
 python iapps/i-search/search_agent.py
 ```
-➡️ Voir iapps/i-search/readme.md pour plus d'informations.
+➡️ Voir [iapps/i-search/readme.md](iapps/i-search/readme.md) pour plus d'informations.
 
 ## 🎯 Objectif du projet
 Démontrer comment des agents IA peuvent être orchestrés en mode Crew pour :

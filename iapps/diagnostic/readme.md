@@ -37,8 +37,7 @@ Intégration avec Ollama (optionnel)
 Clone le dépôt :
 
 ```bash
-git clone https://github.com/ton-utilisateur/assistant-medical.git
-cd assistant-medical
+git clone https://github.com/jerougui/ThinkIA.git
 ```
 Installe les dépendances nécessaires :
 
@@ -48,7 +47,7 @@ pip install -r requirements.txt
 Lance le script :
 
 ```bash
-python main.py
+ThinkIA>python iapps/diagnostic/diagnostic_ia_agents.py
 ```
 Suis les instructions dans la console :
 
@@ -80,4 +79,4 @@ Taille (cm) : 168
 ## 🩺 Diagnostic et recommandations :
 Le tableau clinique suggère un asthme modéré. Il est recommandé de...
 ## 📄 Licence
-Ce projet est sous licence MIT. à utiliser, modifier et distribuer librement.
+Ce projet est sous licence MIT. (utiliser, modifier et distribuer librement).
