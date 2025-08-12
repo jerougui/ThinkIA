@@ -2,6 +2,11 @@
 
 Ce projet présente des exemples concrets d'utilisation des techniques d'agents IA organisés en mode **Crew**, c’est-à-dire des agents collaborant pour accomplir des tâches complexes de manière autonome et coordonnée.
 
+## 🎯 Objectif
+
+Explorer et démontrer comment des agents IA peuvent collaborer efficacement dans des contextes variés, en simulant des environnements réels et des workflows intelligents.
+
+
 ## 📁 Structure du projet
 ```
 THINKIA/
@@ -121,23 +126,22 @@ Les cas d’usage simulés
 
 Les agents IA de ce projet s'appuient sur des **modèles de langage (LLM)** accessibles via deux modes :
 
-### 🔐 Mode local (exécution privée garantie)
-Les modèles sont exécutés **en local** via des outils comme `Ollama`, garantissant :
-- Aucune donnée envoyée à des serveurs externes
-- Contrôle total sur les interactions et les logs
-- Confidentialité maximale pour les scénarios sensibles
+### 🖥️ Exécution locale (LLM privé)
+Les modèles sont exécutés en local via des outils comme Ollama, ce qui offre :
 
-### 🌐 Mode provider (accès à des modèles distants)
-Les agents peuvent également interagir avec des **providers externes** comme `OpenRouter`, permettant :
-- Accès à des modèles avancés hébergés à distance
-- Flexibilité dans le choix des capacités et des coûts
-- Adaptabilité selon les besoins du projet
+- 🔒 Aucune donnée transmise à des serveurs externes
 
-> Le mode d'exécution (local ou provider) peut être configuré dynamiquement selon le contexte ou les préférences de l'utilisateur.
+- 📋 Contrôle total sur les interactions et les journaux
 
-## 🎯 Objectif
+ - 🛡️ Confidentialité maximale pour les cas d’usage sensibles
 
-Explorer et démontrer comment des agents IA peuvent collaborer efficacement dans des contextes variés, en simulant des environnements réels et des workflows intelligents.
+### ☁️ Exécution via fournisseur (LLM distant)
+Les modèles sont accessibles à distance via des plateformes comme [Google IA Studio](https://aistudio.google.com/prompts/new_chat) , [Openrouter](https://openrouter.ai/docs/quickstart) permettant :
 
+- 🌍 Accès à une large variété de modèles puissants
+
+- ⚡ Déploiement rapide sans configuration locale
+
+- 🔄 Mises à jour et améliorations continues côté fournisseur
 ---
 
