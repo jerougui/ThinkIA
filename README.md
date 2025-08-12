@@ -1,76 +1,83 @@
-# 🧠 Search Agent – Assistant IA avec Recherche Web Intelligente
+# THINKIA – Exemples d'Agents IA en mode Crew
 
-**Search Agent** est un assistant intelligent en Python capable d’améliorer ses réponses grâce à des recherches web en temps réel. Il utilise des modèles IA comme ollama en local via Ollama, ou des providers distants tels que OpenRouter ou Gemini. L’agent extrait des mots-clés sémantiques, interroge DuckDuckGo ou Google, sélectionne les résultats les plus pertinents et génère des réponses contextualisées.
+Ce projet présente des exemples concrets d'utilisation des techniques d'agents IA organisés en mode **Crew**, c’est-à-dire des agents collaborant pour accomplir des tâches complexes de manière autonome et coordonnée.
 
----
+## 📁 Structure du projet
 
-![Schéma et processus ](resources/img/schema_diagram.png)
+THINKIA/ ├── iapps/ │ ├── diagnostic/ │ │ ├── diagnostic_ia_agents.py │ │ └── readme.md │ ├── i-search/ │ │ ├── search_agent.py │ │ └── readme.md ├── README.md ← (ce fichier)
 
-## 🚀 Fonctionnalités
-
-- ✅ Extraction sémantique des mots-clés à partir de l’entrée utilisateur
-- 🔍 Recherche web via DuckDuckGo ou Google
-- 🧭 Sélection intelligente du meilleur résultat
-- 📄 Scraping de pages web + filtrage contextuel
-- 🤖 Réponses enrichies en utilisant différents modèles llm en local ou distant
-- 🎨 Affichage coloré dans le terminal grâce à Colorama
 
 ---
 
-## 📦 Installation
+## 🚀 Lancer les exemples
 
-Prérequis : [Python 3.10+](https://www.python.org/downloads/)
-
+### 🩺 Diagnostic médical assisté par agents IA
 ```bash
-# Cloner le dépôt
-git clone https://github.com/jerougui/ThinkIA.git
-cd ThinkIA
-
+python iapps/diagnostic/diagnostic_ia_agents.py
 ```
-🔐 Configuration des clés API
-Pour que l’agent fonctionne correctement, tu dois créer un fichier .env à la racine du projet. Ce fichier contient les clés API privées nécessaires à la communication avec les modèles d’IA.
+➡️ Voir iapps/diagnostic/readme.md pour plus d'informations.
 
-📄 Exemple de fichier `.env :
-```text
-# 🔐 Clés API
-GEMINI_API_KEY=<GEMINI_API_KEY>
-OPENROUTER_API_KEY=<OPENROUTER_API_KEY>
-````
-
-## Installer les dépendances
+## 🔍 Recherche intelligente par agents IA
 ```bash
-pip install -r requirements.txt
-
-python -m pip install -r requirements.txt
+python iapps/i-search/search_agent.py
 ```
-# Exemple 
-## Pré-requis : ollama
-Assure-toi que Ollama est bien installé et que le modèle phi4-mini est lancé :
+➡️ Voir iapps/i-search/readme.md pour plus d'informations.
 
-```bash
-ollama serve # s'il n'est pas encore lancer
+## 🎯 Objectif du projet
+Démontrer comment des agents IA peuvent être orchestrés en mode Crew pour :
 
-ollama run phi4-mini:latest
+Simuler des environnements intelligents
 
-# vérifi que le modèle est bien lancé
-ollama ps
-```
-remarque le script tentera de lancer ollama en local si ce dernier n'est pas lancé.
+Réaliser des tâches complexes en autonomie
 
-## ▶️ lancement du programme 
-Exécute le script principal :
+Collaborer via des rôles spécialisés
 
-```bash
-python search_agent.py
-```
+## 🛠️ Technologies utilisées
+Python
 
-Exemple d’entrée utilisateur :
-```bash
- cherche deux informations interessante (innovation et ou insolite) qui s'est produite aujourd'hui 04/08/2025
-```
+Modèles LLM via ollama, openrouter, etc.
 
-## 🖥️ Exemple de sortie console
-![Exemple de sortie console](resources/img/console_example01.png)
+Architecture multi-agent Crew
 
-# Reférence : 
-https://www.youtube.com/watch?v=9KKnNh89AGU
+Prompts dynamiques et contextuels
+
+## 📚 Ressources
+Chaque exemple contient son propre readme.md avec des détails sur :
+
+Le rôle des agents
+
+Le workflow collaboratif
+
+Les cas d’usage simulés
+
+## 🛠️ Technologies utilisées
+
+- Agents IA orchestrés en mode Crew
+- Intégration avec des LLM en local à l'aide de `ollama` ou  via des providers (`gemini`, `openrouter`, etc.)
+- Prompts dynamiques et messages système personnalisés
+- Scripts Python modulaires et testables
+
+## 🤖 Utilisation des modèles LLM
+
+Les agents IA de ce projet s'appuient sur des **modèles de langage (LLM)** accessibles via deux modes :
+
+### 🔐 Mode local (exécution privée garantie)
+Les modèles sont exécutés **en local** via des outils comme `Ollama`, garantissant :
+- Aucune donnée envoyée à des serveurs externes
+- Contrôle total sur les interactions et les logs
+- Confidentialité maximale pour les scénarios sensibles
+
+### 🌐 Mode provider (accès à des modèles distants)
+Les agents peuvent également interagir avec des **providers externes** comme `OpenRouter`, permettant :
+- Accès à des modèles avancés hébergés à distance
+- Flexibilité dans le choix des capacités et des coûts
+- Adaptabilité selon les besoins du projet
+
+> Le mode d'exécution (local ou provider) peut être configuré dynamiquement selon le contexte ou les préférences de l'utilisateur.
+
+## 🎯 Objectif
+
+Explorer et démontrer comment des agents IA peuvent collaborer efficacement dans des contextes variés, en simulant des environnements réels et des workflows intelligents.
+
+---
+

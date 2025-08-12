@@ -1,4 +1,10 @@
-import sys_msgs
+import sys
+import os
+
+# 📁 Accès aux modules du projet
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+
+import prompts.sys_msgs as sys_msgs
 import requests
 import trafilatura
 from bs4 import BeautifulSoup

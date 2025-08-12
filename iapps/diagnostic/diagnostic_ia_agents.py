@@ -2,7 +2,7 @@ import sys
 import os
 
 # 📁 Accès aux modules du projet
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from tools.sablier import Sablier
 from tools.ollama_manager import launch_model_if_needed
