@@ -12,18 +12,6 @@ Synthèse des réponses et création d’un rapport médical détaillé
 
 Intégration avec différents fournisseurs LLM (ex : Ollama)
 
-## 📦 Structure du projet
-```
-project/
-│
-├── main.py                      # Script principal
-├── config/
-│   └── config.py                # Configuration du fournisseur LLM
-├── tools/
-│   ├── sablier.py              # Animation console pour attente
-│   ├── ollama_manager.py       # Lancement du modèle Ollama si nécessaire
-│   └── llm_provider.py         # Interface avec le modèle de langage
-```
 ## 🧠 Technologies utilisées
 Python 3.10+
 
