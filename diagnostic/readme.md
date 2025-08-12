@@ -80,4 +80,4 @@ Taille (cm) : 168
 ## 🩺 Diagnostic et recommandations :
 Le tableau clinique suggère un asthme modéré. Il est recommandé de...
 ## 📄 Licence
-Ce projet est sous licence MIT. Tu peux l’utiliser, le modifier et le distribuer librement.
+Ce projet est sous licence MIT. à utiliser, modifier et distribuer librement.
