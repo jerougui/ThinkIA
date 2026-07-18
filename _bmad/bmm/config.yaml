@@ -1,0 +1,8 @@
+project_name: ThinkIA
+user_name: jerougui
+communication_language: fr
+document_output_language: fr
+user_skill_level: intermédiaire
+planning_artifacts: _bmad/planning
+implementation_artifacts: _bmad/stories
+project_knowledge: _bmad/planning

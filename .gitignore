@@ -8,3 +8,6 @@ __pycache__/
 config/__pycache__/
 
 .env
+tmp/
+
+.streamlit/
